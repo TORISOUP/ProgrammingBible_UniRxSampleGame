@@ -1,6 +1,7 @@
+// InputEventProviderImpl.cs
 using System;
 using UniRx;
-using UniRx.Triggers;
+using UniRx.Triggers; // UpdateAsObservable()の呼び出しに必要
 using UnityEngine;
 
 namespace UniRxSampleGame.Players.InputImpls
@@ -34,10 +35,17 @@ namespace UniRxSampleGame.Players.InputImpls
             _move.AddTo(this);
             
             // 攻撃ボタンの長押し具合で弱/強攻撃を分岐
+            
+            // UniRx.Triggersをusingしていると
+            // Update()をObservableに変換できる
             this.UpdateAsObservable()
+                // Attackボタンの状態を取得 
                 .Select(_ => Input.GetButton("Attack"))
+                // 値が変動した場合のみ通過
                 .DistinctUntilChanged()
+                // 最後に状態が変動してからの経過時間を付与
                 .TimeInterval()
+                // Subscribe直後の値は無視
                 .Skip(1)
                 .Subscribe(t =>
                 {
@@ -55,7 +63,6 @@ namespace UniRxSampleGame.Players.InputImpls
                     }
                 }).AddTo(this);
         }
-
         private void Update()
         {
             // ジャンプボタンの押し具合を反映
@@ -65,6 +72,5 @@ namespace UniRxSampleGame.Players.InputImpls
             // ReactiveProperty.SetValueAndForceNotifyを使うと強制的にメッセージ発行できる
             _move.SetValueAndForceNotify(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
         }
-        
     }
 }
