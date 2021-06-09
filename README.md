@@ -1,6 +1,7 @@
 # UniRxサンプルゲーム
 
-UniRxを用いたサンプルゲームです。
+
+「[Unityゲーム プログラミング・バイブル 2nd Generation](https://www.borndigital.co.jp/book/22432.html)」の27章「UniRxを用いたゲーム開発」で用いているUniRxを用いたサンプルゲームです。
 以下のアセットを利用しています。
 
 * UniRx 7.1.0
